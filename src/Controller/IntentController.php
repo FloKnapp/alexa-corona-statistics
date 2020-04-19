@@ -38,11 +38,11 @@ class IntentController
     {
         $slots = $this->request->getIntent()->getSlots();
 
-        if (!empty($slots)) {
+        if (!empty($slots[0]['value'])) {
             $result = $this->aggregator->getCurrentCasesByCountry();
+        } else {
+            $result = $this->aggregator->getCurrentCases();
         }
-
-        $result = $this->aggregator->getCurrentCases();
 
         $output = new AlexaOutputSpeech($result);
         return json_encode(new AlexaResponse($output));
