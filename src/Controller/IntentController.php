@@ -3,6 +3,7 @@
 namespace Alexa\Controller;
 
 use Alexa\Entity\AlexaOutputSpeech;
+use Alexa\Entity\AlexaRequest;
 use Alexa\Entity\AlexaResponse;
 use Alexa\Service\CoronaDataAggregator;
 
@@ -13,14 +14,20 @@ use Alexa\Service\CoronaDataAggregator;
 class IntentController
 {
 
+    /** @var AlexaRequest */
+    private $request;
+
+    /** @var CoronaDataAggregator */
     private $aggregator;
 
     /**
      * IntentController constructor.
+     * @param AlexaRequest $request
      * @param CoronaDataAggregator $aggregator
      */
-    public function __construct(CoronaDataAggregator $aggregator)
+    public function __construct(AlexaRequest $request, CoronaDataAggregator $aggregator)
     {
+        $this->request    = $request;
         $this->aggregator = $aggregator;
     }
 
@@ -29,7 +36,10 @@ class IntentController
      */
     public function index()
     {
-        $output = new AlexaOutputSpeech('Hallo');
+
+        $country = $this->request->getIntent()->getSlots()[0]->getValue();
+
+        $output = new AlexaOutputSpeech($country);
         return json_encode(new AlexaResponse($output));
     }
 
