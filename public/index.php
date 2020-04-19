@@ -10,6 +10,8 @@ $client     = new Client();
 $aggregator = new CoronaDataAggregator($client);
 $controller = new IntentController($aggregator);
 
+header ('Content-Type: application/json');
+
 $result = $controller->index();
 
 file_put_contents('test.txt', $result . PHP_EOL . PHP_EOL, FILE_APPEND);
