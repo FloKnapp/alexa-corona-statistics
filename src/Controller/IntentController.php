@@ -38,7 +38,7 @@ class IntentController
     {
         $slots = $this->request->getIntent()->getSlots();
 
-        if (!empty($slots[0]['value'])) {
+        if (!empty($slots[0]->getValue())) {
             $result = $this->aggregator->getCurrentCasesByCountry();
         } else {
             $result = $this->aggregator->getCurrentCases();
