@@ -6,6 +6,10 @@ use Alexa\Entity\AlexaOutputSpeech;
 use Alexa\Entity\AlexaResponse;
 use Alexa\Service\CoronaDataAggregator;
 
+/**
+ * Class IntentController
+ * @package Alexa\Controller
+ */
 class IntentController
 {
 
@@ -21,7 +25,7 @@ class IntentController
     }
 
     /**
-     *
+     * @return string
      */
     public function index()
     {

@@ -10,6 +10,10 @@ $client     = new Client();
 $aggregator = new CoronaDataAggregator($client);
 $controller = new IntentController($aggregator);
 
-echo $controller->index();
+$result = $controller->index();
+
+file_put_contents('test.txt', $result . PHP_EOL . PHP_EOL, FILE_APPEND);
+
+echo $result;
 
 exit(0);
