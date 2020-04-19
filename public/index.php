@@ -2,4 +2,14 @@
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-echo "Hallo2";
+header ('Content-Type: application/json');
+
+echo json_encode([
+    'response' => [
+        'outputSpeech' => [
+            'text' => 'hallo'
+        ]
+    ]
+]);
+
+exit(0);
