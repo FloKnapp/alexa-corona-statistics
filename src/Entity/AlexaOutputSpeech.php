@@ -26,16 +26,17 @@ class AlexaOutputSpeech implements \JsonSerializable
         $this->type = $type;
     }
 
+    /**
+     * @return array
+     */
     public function jsonSerialize()
     {
-        return json_encode(
-            [
-                'outputSpeech' => [
-                    'text' => $this->text,
-                    'type' => $this->type
-                ]
+        return [
+            'outputSpeech' => [
+                'text' => $this->text,
+                'type' => $this->type
             ]
-        );
+        ];
     }
 
 }

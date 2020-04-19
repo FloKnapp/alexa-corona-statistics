@@ -25,14 +25,14 @@ class AlexaResponse implements \JsonSerializable
     }
 
     /**
-     * @return string
+     * @return array
      */
     public function jsonSerialize()
     {
-        return json_encode([
+        return [
             'version'  => $this->version,
             'response' => $this->output
-        ]);
+        ];
     }
 
 }
