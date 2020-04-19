@@ -25,16 +25,12 @@ class IntentController
     }
 
     /**
-     * @return string
+     * @return AlexaResponse
      */
     public function index()
     {
-        header('Content-Type: application/json');
-
-        $output = new AlexaOutputSpeech('test');
-        $response = new AlexaResponse($output);
-
-        return json_encode($response);
+        $output = new AlexaOutputSpeech('Hallo');
+        return new AlexaResponse($output);
     }
 
 }

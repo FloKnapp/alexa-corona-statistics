@@ -16,6 +16,6 @@ $result = $controller->index();
 
 file_put_contents('test.txt', $result . PHP_EOL . PHP_EOL, FILE_APPEND);
 
-echo $result;
+echo json_encode($result);
 
 exit(0);
