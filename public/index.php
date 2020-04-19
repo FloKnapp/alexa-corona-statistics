@@ -8,7 +8,7 @@ use Alexa\Service\CoronaDataAggregator;
 use Alexa\Controller\IntentController;
 
 $requestBody = file_get_contents('php://stdin');
-$request     = new AlexaRequest(json_decode($requestBody, true)['request']);
+$request     = new AlexaRequest($requestBody);
 
 $client     = new Client();
 $aggregator = new CoronaDataAggregator($client);
