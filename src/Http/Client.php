@@ -7,10 +7,17 @@ namespace Alexa\Http;
 class Client
 {
 
-    private static function request(string $method, string $path, array $headers, array $data)
+    /**
+     * @param string $method
+     * @param string $uri
+     * @param array  $headers
+     * @param array  $data
+     */
+    private static function request(string $method, string $uri, array $headers, array $data)
     {
         $ch = curl_init();
 
+        curl_setopt($ch, CURLOPT_URL, $uri);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
 
         switch ($method) {
@@ -31,8 +38,9 @@ class Client
 
         }
 
+        $response = curl_exec($ch);
 
-
+        var_dump($response);
 
     }
 

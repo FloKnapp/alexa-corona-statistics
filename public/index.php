@@ -2,16 +2,14 @@
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-header ('Content-Type: application/json');
+use Alexa\Http\Client;
+use Alexa\Service\CoronaDataAggregator;
+use Alexa\Controller\IntentController;
 
-echo json_encode([
-    'version' => '1.0',
-    'response' => [
-        'outputSpeech' => [
-            'type' => 'PlainText',
-            'text' => 'hallo'
-        ]
-    ]
-]);
+$client     = new Client();
+$aggregator = new CoronaDataAggregator($client);
+$controller = new IntentController($aggregator);
+
+echo $controller->index();
 
 exit(0);
