@@ -36,8 +36,13 @@ class IntentController
      */
     public function index()
     {
+        $slots = $this->request->getIntent()->getSlots();
 
-        $country = $this->request->getIntent()->getSlots()[0]->getValue();
+        if (!empty($slots)) {
+            $result = $this->aggregator->getCurrentCasesByCountry();
+        }
+
+        $result = $this->aggregator->getCurrentCases();
 
         $output = new AlexaOutputSpeech($country);
         return json_encode(new AlexaResponse($output));

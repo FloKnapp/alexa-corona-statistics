@@ -26,10 +26,14 @@ class CoronaDataAggregator
     public function getCurrentCases()
     {
 
+        return 'Nö';
+
     }
 
     public function getCurrentCasesByCountry($country = 'de')
     {
+
+        return 'Deutschland';
 
     }
 
