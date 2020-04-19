@@ -44,7 +44,7 @@ class IntentController
 
         $result = $this->aggregator->getCurrentCases();
 
-        $output = new AlexaOutputSpeech($country);
+        $output = new AlexaOutputSpeech($result);
         return json_encode(new AlexaResponse($output));
     }
 
