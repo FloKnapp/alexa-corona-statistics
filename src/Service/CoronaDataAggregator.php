@@ -106,6 +106,7 @@ HTML;
         shuffle($this->finalSentences);
 
         $output = <<<HTML
+<speak>
 <voice name="Matthew">Am {$germanDate} gab es in {$country} <say-as interpret-as="spell-out">{$confirmed}</say-as> bestätigte Infektionen.</voice>
 Das sind {$this->formatWording($confirmedDayBefore)} als gestern. 
 Davon sind gestorben: {$amounts['deaths']}. 
@@ -113,7 +114,7 @@ Das sind {$this->formatWording($deathsDayBefore)} als gestern.
 Davon sind geheilt: {$amounts['recovered']}. 
 Das sind {$this->formatWording($recoveredDayBefore)} als gestern. 
 Das bedeutet, dass es aktuell noch {$activeCases} aktive Infektionen gibt. 
-Das sind {$this->formatWording($activeCasesBefore)} als gestern. {$this->finalSentences[0]}
+Das sind {$this->formatWording($activeCasesBefore)} als gestern. {$this->finalSentences[0]}</speak>
 HTML;
 
         return $output;
