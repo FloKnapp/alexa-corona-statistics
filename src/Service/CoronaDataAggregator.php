@@ -38,7 +38,7 @@ class CoronaDataAggregator
 
         $germanDate = $this->convertDate($amounts['date']);
 
-        $output = 'Am ' . $germanDate . ' gab es weltweit ' . $amounts['confirmed'] . ' bestätigte Infektionen. Davon sind ' . $amounts['deaths'] . ' Personen verstorben und ' . $amounts['recovered'] . ' Personen bereits genesen.';
+        $output = 'Am ' . $germanDate . ' gab es weltweit ' . $amounts['confirmed'] . ' bestätigte Infektionen. Davon sind gestorben: ' . $amounts['deaths'] . '. Davon sind geheilt: ' . $amounts['recovered'];
 
         return $output;
 
