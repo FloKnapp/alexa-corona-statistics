@@ -36,11 +36,24 @@ class CoronaDataAggregator
     {
         $amounts = $this->getAggregatedAmount();
 
-        $germanDate = $this->convertDate($amounts['date']);
+        $germanDate = $this->convertDateFromIsoToGerman($amounts['date']);
+
+        $dayBeforeDate = (new \DateTime($germanDate))->modify('-1 days')->format('m-d-Y');
+        $amountsDayBefore = $this->getAggregatedAmount($dayBeforeDate);
 
         $activeCases = $amounts['confirmed'] - $amounts['recovered'] - $amounts['deaths'];
+        $activeCasesBefore = $amountsDayBefore['confirmed'] - $amountsDayBefore['recovered'] - $amountsDayBefore['deaths'];
+        $activeCasesBefore = $activeCases - $activeCasesBefore;
 
-        $output = 'Am ' . $germanDate . ' gab es weltweit ' . $amounts['confirmed'] . ' bestätigte Infektionen. Davon sind gestorben: ' . $amounts['deaths'] . '. Davon sind geheilt: ' . $amounts['recovered'] . '. Das bedeutet, dass es aktuell noch ' . $activeCases . ' aktive Infektionen gibt. Insgesamt sind derzeit ' . $amounts['countries'] . ' Länder betroffen.';
+        $confirmed = $amounts['confirmed'];
+        $deaths = $amounts['deaths'];
+        $recovered = $amounts['recovered'];
+
+        $confirmedDayBefore = $confirmed - $amountsDayBefore['confirmed'];
+        $deathsDayBefore = $deaths - $amountsDayBefore['deaths'];
+        $recoveredDayBefore = $recovered - $amountsDayBefore['recovered'];
+
+        $output = 'Am ' . $germanDate . ' gab es weltweit ' . $confirmed . ' bestätigte Infektionen. Das sind ' . $confirmedDayBefore . ' mehr als gestern. Davon sind gestorben: ' . $amounts['deaths'] . ' (' . $deathsDayBefore .' mehr als gestern). Davon sind geheilt: ' . $amounts['recovered'] . ' (' . $recoveredDayBefore . '). Das bedeutet, dass es aktuell noch ' . $activeCases . ' aktive Infektionen gibt, das sind ' . $activeCasesBefore . ' mehr als gestern. Insgesamt sind derzeit ' . $amounts['countries'] . ' Länder betroffen.';
 
         return $output;
 
@@ -74,7 +87,7 @@ class CoronaDataAggregator
             'countries' => 0,
             'confirmed' => 0,
             'deaths'    => 0,
-            'recovered' => 0
+            'recovered' => 0,
         ];
 
         foreach ($stats['csv']->data as $row) {
@@ -110,7 +123,7 @@ class CoronaDataAggregator
     }
 
     /**
-     * @param $date
+     * @param $date ISO-Date
      * @return array
      *
      * @throws \Exception
@@ -123,7 +136,7 @@ class CoronaDataAggregator
 
         // In case of non existing statistics try the day before
         if (!file_exists($this->cacheDir . '/' . $date . '.csv')) {
-            $reformattedDate = $this->convertDate($date);
+            $reformattedDate = $this->convertDateFromIsoToGerman($date);
             $dayBefore = (new \DateTime($reformattedDate))->modify('-1 days')->format('m-d-Y');
             return $this->getLatestStatistics($dayBefore);
         }
@@ -141,10 +154,20 @@ class CoronaDataAggregator
      * @param string $date
      * @return string
      */
-    private function convertDate(string $date)
+    private function convertDateFromIsoToGerman(string $date)
     {
         $parts = explode('-', $date);
         return implode('.', [$parts[1], $parts[0], $parts[2]]);
+    }
+
+    /**
+     * @param string $date
+     * @return string
+     */
+    private function convertDateFromGermanToIso(string $date)
+    {
+        $parts = explode('.', $date);
+        return implode('-', [$parts[1], $parts[0], $parts[2]]);
     }
 
 }
