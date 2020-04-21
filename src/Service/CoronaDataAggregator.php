@@ -40,7 +40,7 @@ class CoronaDataAggregator
 
         $activeCases = $amounts['confirmed'] - $amounts['recovered'] - $amounts['deaths'];
 
-        $output = 'Am ' . $germanDate . ' gab es weltweit ' . $amounts['confirmed'] . ' bestätigte Infektionen. Davon sind gestorben: ' . $amounts['deaths'] . '. Davon sind geheilt: ' . $amounts['recovered'] . '. Das bedeutet, dass es aktuell noch ' . $activeCases . ' aktive Infektionen gibt.';
+        $output = 'Am ' . $germanDate . ' gab es weltweit ' . $amounts['confirmed'] . ' bestätigte Infektionen. Davon sind gestorben: ' . $amounts['deaths'] . '. Davon sind geheilt: ' . $amounts['recovered'] . '. Das bedeutet, dass es aktuell noch ' . $activeCases . ' aktive Infektionen gibt. Insgesamt sind derzeit ' . $amounts['countries'] . ' Länder betroffen.';
 
         return $output;
 
