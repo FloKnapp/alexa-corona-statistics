@@ -31,10 +31,12 @@ class AlexaOutputSpeech implements \JsonSerializable
      */
     public function jsonSerialize()
     {
+        $textKey = ($this->type === 'SSML') ? 'ssml' : 'text';
+
         return [
             'outputSpeech' => [
-                'text' => $this->text,
-                'type' => $this->type
+                $textKey => $this->text,
+                'type'   => $this->type
             ]
         ];
     }
