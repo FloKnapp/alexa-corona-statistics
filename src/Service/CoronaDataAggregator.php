@@ -53,7 +53,7 @@ class CoronaDataAggregator
         $deathsDayBefore = $deaths - $amountsDayBefore['deaths'];
         $recoveredDayBefore = $recovered - $amountsDayBefore['recovered'];
 
-        $output = 'Am ' . $germanDate . ' gab es weltweit ' . $confirmed . ' bestätigte Infektionen. Das sind ' . $confirmedDayBefore . ' mehr als gestern. Davon sind gestorben: ' . $amounts['deaths'] . ' (' . $deathsDayBefore .' mehr als gestern). Davon sind geheilt: ' . $amounts['recovered'] . ' (' . $recoveredDayBefore . '). Das bedeutet, dass es aktuell noch ' . $activeCases . ' aktive Infektionen gibt, das sind ' . $activeCasesBefore . ' mehr als gestern. Insgesamt sind derzeit ' . $amounts['countries'] . ' Länder betroffen.';
+        $output = 'Am ' . $germanDate . ' gab es weltweit ' . $confirmed . ' bestätigte Infektionen. Das sind ' . $confirmedDayBefore . ' mehr als gestern. Davon sind gestorben: ' . $amounts['deaths'] . '. Das sind ' . $deathsDayBefore .' mehr als gestern. Davon sind geheilt: ' . $amounts['recovered'] . '. Das sind ' . $recoveredDayBefore . ' mehr als gestern. Das bedeutet, dass es aktuell noch ' . $activeCases . ' aktive Infektionen gibt, das sind ' . $activeCasesBefore . ' mehr als gestern. Insgesamt sind derzeit ' . $amounts['countries'] . ' Länder betroffen.';
 
         return $output;
 
