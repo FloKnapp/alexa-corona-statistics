@@ -10,13 +10,21 @@ use Alexa\Entity\AlexaRequest;
 use Alexa\Service\CoronaDataAggregator;
 use Alexa\Controller\IntentController;
 
+$client = new Client();
+
+if ($_SERVER['REQUEST_URI'] === '/collect') {
+
+    $collector = new Alexa\Cronjob\Collector($client);
+    $collector->run();
+
+    exit(0);
+}
+
 header('Accept: application/json');
 
 $requestBody = file_get_contents('php://input');
 
-$request     = new AlexaRequest($requestBody);
-
-$client     = new Client();
+$request    = new AlexaRequest($requestBody);
 $aggregator = new CoronaDataAggregator($client);
 $controller = new IntentController($request, $aggregator);
 
