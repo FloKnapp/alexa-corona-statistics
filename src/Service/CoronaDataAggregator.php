@@ -69,7 +69,7 @@ Davon sind geheilt: {$amounts['recovered']}.
 Das sind {$recoveredDayBefore} mehr als gestern. 
 Das bedeutet, dass es aktuell noch {$activeCases} aktive Infektionen gibt. 
 Das sind {$activeCasesBefore} mehr als gestern. 
-Insgesamt sind derzeit {$amounts['countries']} Länder betroffen. {$this->finalSentences[0]}';
+Insgesamt sind derzeit {$amounts['countries']} Länder betroffen. {$this->finalSentences[0]}
 HTML;
 
         return $output;
@@ -106,14 +106,14 @@ HTML;
         shuffle($this->finalSentences);
 
         $output = <<<HTML
-DAm {$germanDate} gab es in {$country} {$confirmed} bestätigte Infektionen. 
+Am {$germanDate} gab es in {$country} {$confirmed} bestätigte Infektionen. 
 Das sind {$confirmedDayBefore} mehr als gestern. 
 Davon sind gestorben: {$amounts['deaths']}. 
 Das sind {$deathsDayBefore} mehr als gestern. 
 Davon sind geheilt: {$amounts['recovered']}. 
 Das sind {$recoveredDayBefore} mehr als gestern. 
 Das bedeutet, dass es aktuell noch {$activeCases} aktive Infektionen gibt. 
-Das sind {$activeCasesBefore} mehr als gestern. {$this->finalSentences[0]}';
+Das sind {$activeCasesBefore} mehr als gestern. {$this->finalSentences[0]}
 HTML;
 
         return $output;
