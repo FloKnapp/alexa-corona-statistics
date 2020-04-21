@@ -34,26 +34,31 @@ class CoronaDataAggregator
      */
     public function getCurrentCases()
     {
-        $amounts = $this->getAggregatedAmount();
-
+        $amounts    = $this->getAggregatedAmount();
         $germanDate = $this->convertDateFromIsoToGerman($amounts['date']);
 
-        $dayBeforeDate = (new \DateTime($germanDate))->modify('-1 days')->format('m-d-Y');
+        $dayBeforeDate    = (new \DateTime($germanDate))->modify('-1 days')->format('m-d-Y');
         $amountsDayBefore = $this->getAggregatedAmount($dayBeforeDate);
 
-        $activeCases = $amounts['confirmed'] - $amounts['recovered'] - $amounts['deaths'];
+        $activeCases       = $amounts['confirmed'] - $amounts['recovered'] - $amounts['deaths'];
         $activeCasesBefore = $amountsDayBefore['confirmed'] - $amountsDayBefore['recovered'] - $amountsDayBefore['deaths'];
         $activeCasesBefore = $activeCases - $activeCasesBefore;
 
-        $confirmed = $amounts['confirmed'];
-        $deaths = $amounts['deaths'];
-        $recovered = $amounts['recovered'];
+        $confirmed  = $amounts['confirmed'];
+        $deaths     = $amounts['deaths'];
+        $recovered  = $amounts['recovered'];
 
         $confirmedDayBefore = $confirmed - $amountsDayBefore['confirmed'];
-        $deathsDayBefore = $deaths - $amountsDayBefore['deaths'];
+        $deathsDayBefore    = $deaths - $amountsDayBefore['deaths'];
         $recoveredDayBefore = $recovered - $amountsDayBefore['recovered'];
 
-        $output = 'Am ' . $germanDate . ' gab es weltweit ' . $confirmed . ' bestätigte Infektionen. Das sind ' . $confirmedDayBefore . ' mehr als gestern. Davon sind gestorben: ' . $amounts['deaths'] . '. Das sind ' . $deathsDayBefore .' mehr als gestern. Davon sind geheilt: ' . $amounts['recovered'] . '. Das sind ' . $recoveredDayBefore . ' mehr als gestern. Das bedeutet, dass es aktuell noch ' . $activeCases . ' aktive Infektionen gibt, das sind ' . $activeCasesBefore . ' mehr als gestern. Insgesamt sind derzeit ' . $amounts['countries'] . ' Länder betroffen.';
+        $output = <<<HTML
+Am {$germanDate} gab es weltweit {$confirmed} bestätigte Infektionen. Das sind {$confirmedDayBefore} mehr als gestern. 
+Davon sind gestorben: {$amounts['deaths']}. Das sind {$deathsDayBefore} mehr als gestern. 
+Davon sind geheilt: {$amounts['recovered']}. Das sind {$recoveredDayBefore} mehr als gestern. 
+Das bedeutet, dass es aktuell noch {$activeCases} aktive Infektionen gibt, das sind {$activeCasesBefore} mehr als gestern. 
+Insgesamt sind derzeit {$amounts['countries']} Länder betroffen.';
+HTML;
 
         return $output;
 

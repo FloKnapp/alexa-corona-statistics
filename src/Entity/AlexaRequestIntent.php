@@ -16,7 +16,7 @@ class AlexaRequestIntent
     private $confirmationStatus;
 
     /** @var AlexaRequestSlot[] */
-    private $slots;
+    private $slots = [];
 
     /**
      * AlexaRequestIntent constructor.

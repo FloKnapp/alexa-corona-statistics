@@ -4,6 +4,7 @@ namespace Alexa\Controller;
 
 use Alexa\Entity\AlexaOutputSpeech;
 use Alexa\Entity\AlexaRequest;
+use Alexa\Entity\AlexaRequestSlot;
 use Alexa\Entity\AlexaResponse;
 use Alexa\Service\CoronaDataAggregator;
 
@@ -38,13 +39,11 @@ class IntentController
     {
         $slots = $this->request->getIntent()->getSlots();
 
-        if (!empty($slots[0]->getValue())) {
+        if (isset($slots[0]) && $slots[0] instanceof AlexaRequestSlot) {
             $result = $this->aggregator->getCurrentCasesByCountry($slots[0]->getValue());
         } else {
             $result = $this->aggregator->getCurrentCases();
         }
-
-        $sentence = '';
 
         $output = new AlexaOutputSpeech($result);
         return json_encode(new AlexaResponse($output));
