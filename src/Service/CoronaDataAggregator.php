@@ -106,7 +106,7 @@ HTML;
         shuffle($this->finalSentences);
 
         $output = <<<HTML
-Am {$germanDate} gab es in {$country} {$confirmed} bestätigte Infektionen. 
+<voice name="Matthew"><say-as interpret-as="digits">Am {$germanDate} gab es in {$country} {$confirmed} bestätigte Infektionen.</say-as></voice>
 Das sind {$this->formatWording($confirmedDayBefore)} als gestern. 
 Davon sind gestorben: {$amounts['deaths']}. 
 Das sind {$this->formatWording($deathsDayBefore)} als gestern. 
