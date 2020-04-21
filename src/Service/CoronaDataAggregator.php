@@ -183,30 +183,9 @@ HTML;
             return $counts['byCountry'][$country];
         }
 
-        $counts['countries'] = count($this->getAffectedCountries());
+        $counts['countries'] = count($counts['byCountry']);
 
         return $counts;
-    }
-
-    /**
-     * @return array
-     *
-     * @throws \Exception
-     */
-    private function getAffectedCountries()
-    {
-        $stats = $this->getLatestStatistics();
-
-        $result = [];
-
-        foreach ($stats['csv']->data as $data) {
-            $column = $data['Country_Region'] ?? $data['Country/Region'];
-            $result[$column] = [
-                ''
-            ];
-        }
-
-        return array_values($result);
     }
 
     /**
