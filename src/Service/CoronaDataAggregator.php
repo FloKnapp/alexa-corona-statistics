@@ -12,6 +12,11 @@ use ParseCsv\Csv;
 class CoronaDataAggregator
 {
 
+    private $finalSentences = [
+        'Ich hoffe Du machst Dir heute einen schönen Tag zuhause',
+        'Bitte vergiss nicht Deine Schutzmaske mitzunehmen, wenn Du hinaus gehst.'
+    ];
+
     /** @var Client */
     private $client;
 
@@ -52,12 +57,14 @@ class CoronaDataAggregator
         $deathsDayBefore    = $deaths - $amountsDayBefore['deaths'];
         $recoveredDayBefore = $recovered - $amountsDayBefore['recovered'];
 
+        shuffle($this->finalSentences);
+
         $output = <<<HTML
 Am {$germanDate} gab es weltweit {$confirmed} bestätigte Infektionen. Das sind {$confirmedDayBefore} mehr als gestern. 
 Davon sind gestorben: {$amounts['deaths']}. Das sind {$deathsDayBefore} mehr als gestern. 
 Davon sind geheilt: {$amounts['recovered']}. Das sind {$recoveredDayBefore} mehr als gestern. 
 Das bedeutet, dass es aktuell noch {$activeCases} aktive Infektionen gibt, das sind {$activeCasesBefore} mehr als gestern. 
-Insgesamt sind derzeit {$amounts['countries']} Länder betroffen.';
+Insgesamt sind derzeit {$amounts['countries']} Länder betroffen. {$this->finalSentences[0]}';
 HTML;
 
         return $output;
