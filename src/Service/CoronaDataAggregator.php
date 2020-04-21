@@ -13,8 +13,9 @@ class CoronaDataAggregator
 {
 
     private $finalSentences = [
-        'Ich hoffe Du machst Dir heute einen schönen Tag zuhause',
-        'Bitte vergiss nicht Deine Schutzmaske mitzunehmen, wenn Du hinaus gehst.'
+        'Ich hoffe Du machst Dir heute einen schönen Tag zuhause.',
+        'Bitte vergiss nicht Deinen Atemschutz mitzunehmen, wenn Du hinaus musst.',
+        'Denke daran mindestens 2 Meter Abstand zu Deinen Mitmenschen zu halten, wenn Du hinaus musst.'
     ];
 
     /** @var Client */
@@ -60,10 +61,14 @@ class CoronaDataAggregator
         shuffle($this->finalSentences);
 
         $output = <<<HTML
-Am {$germanDate} gab es weltweit {$confirmed} bestätigte Infektionen. Das sind {$confirmedDayBefore} mehr als gestern. 
-Davon sind gestorben: {$amounts['deaths']}. Das sind {$deathsDayBefore} mehr als gestern. 
-Davon sind geheilt: {$amounts['recovered']}. Das sind {$recoveredDayBefore} mehr als gestern. 
-Das bedeutet, dass es aktuell noch {$activeCases} aktive Infektionen gibt, das sind {$activeCasesBefore} mehr als gestern. 
+Am {$germanDate} gab es weltweit {$confirmed} bestätigte Infektionen. 
+Das sind {$confirmedDayBefore} mehr als gestern. 
+Davon sind gestorben: {$amounts['deaths']}. 
+Das sind {$deathsDayBefore} mehr als gestern. 
+Davon sind geheilt: {$amounts['recovered']}. 
+Das sind {$recoveredDayBefore} mehr als gestern. 
+Das bedeutet, dass es aktuell noch {$activeCases} aktive Infektionen gibt. 
+Das sind {$activeCasesBefore} mehr als gestern. 
 Insgesamt sind derzeit {$amounts['countries']} Länder betroffen. {$this->finalSentences[0]}';
 HTML;
 
@@ -77,18 +82,56 @@ HTML;
      * @param string $country
      * @return string
      */
-    public function getCurrentCasesByCountry(string $country = 'de')
+    public function getCurrentCasesByCountry(string $country)
     {
-        return 'Deutschland';
+        $amounts = $this->getAggregatedAmount('', $country);
+
+        $germanDate = $this->convertDateFromIsoToGerman($amounts['date']);
+
+        $dayBeforeDate    = (new \DateTime($germanDate))->modify('-1 days')->format('m-d-Y');
+        $amountsDayBefore = $this->getAggregatedAmount($dayBeforeDate, $country);
+
+        $activeCases       = $amounts['confirmed'] - $amounts['recovered'] - $amounts['deaths'];
+        $activeCasesBefore = $amountsDayBefore['confirmed'] - $amountsDayBefore['recovered'] - $amountsDayBefore['deaths'];
+        $activeCasesBefore = $activeCases - $activeCasesBefore;
+
+        $confirmed  = $amounts['confirmed'];
+        $deaths     = $amounts['deaths'];
+        $recovered  = $amounts['recovered'];
+
+        $confirmedDayBefore = $confirmed - $amountsDayBefore['confirmed'];
+        $deathsDayBefore    = $deaths - $amountsDayBefore['deaths'];
+        $recoveredDayBefore = $recovered - $amountsDayBefore['recovered'];
+
+        shuffle($this->finalSentences);
+
+        $output = <<<HTML
+DAm {$germanDate} gab es in {$country} {$confirmed} bestätigte Infektionen. 
+Das sind {$confirmedDayBefore} mehr als gestern. 
+Davon sind gestorben: {$amounts['deaths']}. 
+Das sind {$deathsDayBefore} mehr als gestern. 
+Davon sind geheilt: {$amounts['recovered']}. 
+Das sind {$recoveredDayBefore} mehr als gestern. 
+Das bedeutet, dass es aktuell noch {$activeCases} aktive Infektionen gibt. 
+Das sind {$activeCasesBefore} mehr als gestern. {$this->finalSentences[0]}';
+HTML;
+
+        return $output;
+    }
+
+    private function calculateCases($counts)
+    {
+
     }
 
     /**
      * @param string $date
+     * @param string $country
      * @return array
      *
      * @throws \Exception
      */
-    private function getAggregatedAmount(string $date = '')
+    private function getAggregatedAmount(string $date = '', $country = '')
     {
         $fields = ['confirmed', 'deaths', 'recovered'];
 
@@ -100,14 +143,35 @@ HTML;
             'confirmed' => 0,
             'deaths'    => 0,
             'recovered' => 0,
+            'byCountry' => []
+        ];
+
+        $countsByCountry = [
+            'date'      => $stats['date'],
+            'confirmed' => 0,
+            'deaths'    => 0,
+            'recovered' => 0
         ];
 
         foreach ($stats['csv']->data as $row) {
 
             foreach ($fields as $field) {
+
                 $counts[$field] = $counts[$field] + (int)$row[ucfirst($field)];
+                $countryColumnValue = $row['Country_Region'] ?? $row['Country/Region'];
+
+                if (empty($counts['byCountry'][$countryColumnValue])) {
+                    $counts['byCountry'][$countryColumnValue] = $countsByCountry;
+                }
+
+                $counts['byCountry'][$countryColumnValue][$field] += (int)$row[ucfirst($field)];
+
             }
 
+        }
+
+        if (!empty($country)) {
+            return $counts['byCountry'][$country];
         }
 
         $counts['countries'] = count($this->getAffectedCountries());
@@ -128,7 +192,9 @@ HTML;
 
         foreach ($stats['csv']->data as $data) {
             $column = $data['Country_Region'] ?? $data['Country/Region'];
-            $result[$column] = $column;
+            $result[$column] = [
+                ''
+            ];
         }
 
         return array_values($result);

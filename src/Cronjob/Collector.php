@@ -72,7 +72,13 @@ class Collector
         return $result;
     }
 
-    private function saveFile($filename, $url)
+    /**
+     * @param string $filename
+     * @param string $url
+     * @return false|int|null
+     * @throws ClientResponseException
+     */
+    private function saveFile(string $filename, string $url)
     {
         if (file_exists($this->cacheDir . '/' . $filename)) {
             return null;

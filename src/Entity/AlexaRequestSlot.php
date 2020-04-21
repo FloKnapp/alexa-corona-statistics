@@ -21,6 +21,13 @@ class AlexaRequestSlot
     /** @var string */
     private $source;
 
+    /** @var AlexaResolution[] */
+    private $resolutions;
+
+    /**
+     * AlexaRequestSlot constructor.
+     * @param array $data
+     */
     public function __construct(array $data = [])
     {
         $this->fill($data);
@@ -58,10 +65,28 @@ class AlexaRequestSlot
         return $this->source;
     }
 
+    /**
+     * @return AlexaResolution[]
+     */
+    public function getResolutions(): array
+    {
+        return $this->resolutions;
+    }
+
+    /**
+     * @param $data
+     */
     private function fill($data)
     {
         foreach ($data as $key => $value) {
-            $this->$key = $value;
+            if (!is_array($value)) {
+                $this->$key = $value;
+            } else if (array_key_exists('resolutionsPerAuthority', $value)) {
+                $this->resolutions = array_map(function($data) {
+                    return new AlexaResolution($data);
+                }, $value['resolutionsPerAuthority']);
+            }
+
         }
     }
 

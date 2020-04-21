@@ -40,7 +40,7 @@ class IntentController
         $slots = $this->request->getIntent()->getSlots();
 
         if (isset($slots[0]) && $slots[0] instanceof AlexaRequestSlot) {
-            $result = $this->aggregator->getCurrentCasesByCountry($slots[0]->getValue());
+            $result = $this->aggregator->getCurrentCasesByCountry($slots[0]->getResolutions()[0]->getValue());
         } else {
             $result = $this->aggregator->getCurrentCases();
         }
