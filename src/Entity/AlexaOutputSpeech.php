@@ -20,7 +20,7 @@ class AlexaOutputSpeech implements \JsonSerializable
      * @param string $text
      * @param string $type
      */
-    public function __construct(string $text, $type = 'PlainText')
+    public function __construct(string $text, $type = 'SSML')
     {
         $this->text = $text;
         $this->type = $type;
