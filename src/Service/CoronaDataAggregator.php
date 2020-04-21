@@ -107,7 +107,7 @@ HTML;
 
         $output = <<<HTML
 <speak>
-<voice name="Matthew">Am {$germanDate} gab es in {$country} <say-as interpret-as="spell-out">{$confirmed}</say-as> bestätigte Infektionen.</voice>
+<voice name="Emma">Am {$germanDate} gab es in {$country} <say-as interpret-as="spell-out">{$confirmed}</say-as> bestätigte Infektionen.</voice>
 Das sind {$this->formatWording($confirmedDayBefore)} als gestern. 
 Davon sind gestorben: {$amounts['deaths']}. 
 Das sind {$this->formatWording($deathsDayBefore)} als gestern. 
