@@ -62,13 +62,13 @@ class CoronaDataAggregator
 
         $output = <<<HTML
 Am {$germanDate} gab es weltweit {$confirmed} bestätigte Infektionen. 
-Das sind {$confirmedDayBefore} mehr als gestern. 
+Das sind {$this->formatWording($confirmedDayBefore)} als gestern.
 Davon sind gestorben: {$amounts['deaths']}. 
-Das sind {$deathsDayBefore} mehr als gestern. 
+Das sind {$this->formatWording($deathsDayBefore)} als gestern.
 Davon sind geheilt: {$amounts['recovered']}. 
-Das sind {$recoveredDayBefore} mehr als gestern. 
+Das sind {$this->formatWording($recoveredDayBefore)} als gestern.
 Das bedeutet, dass es aktuell noch {$activeCases} aktive Infektionen gibt. 
-Das sind {$activeCasesBefore} mehr als gestern. 
+Das sind {$this->formatWording($activeCasesBefore)} als gestern.
 Insgesamt sind derzeit {$amounts['countries']} Länder betroffen. {$this->finalSentences[0]}
 HTML;
 
@@ -107,16 +107,25 @@ HTML;
 
         $output = <<<HTML
 Am {$germanDate} gab es in {$country} {$confirmed} bestätigte Infektionen. 
-Das sind {$confirmedDayBefore} mehr als gestern. 
+Das sind {$this->formatWording($confirmedDayBefore)} als gestern. 
 Davon sind gestorben: {$amounts['deaths']}. 
-Das sind {$deathsDayBefore} mehr als gestern. 
+Das sind {$this->formatWording($deathsDayBefore)} als gestern. 
 Davon sind geheilt: {$amounts['recovered']}. 
-Das sind {$recoveredDayBefore} mehr als gestern. 
+Das sind {$this->formatWording($recoveredDayBefore)} als gestern. 
 Das bedeutet, dass es aktuell noch {$activeCases} aktive Infektionen gibt. 
-Das sind {$activeCasesBefore} mehr als gestern. {$this->finalSentences[0]}
+Das sind {$this->formatWording($activeCasesBefore)} als gestern. {$this->finalSentences[0]}
 HTML;
 
         return $output;
+    }
+
+    private function formatWording($count)
+    {
+        if ($count < 0) {
+            return abs($count) . ' weniger';
+        }
+
+        return $count . ' mehr';
     }
 
     private function calculateCases($counts)
